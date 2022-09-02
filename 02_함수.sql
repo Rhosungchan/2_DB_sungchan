@@ -40,7 +40,7 @@ FROM EMPLOYEE;
 -- EMPLOYEE 테이블에서 사원명, 이메일 중 아이디만 조회
 -- sun_di@or.kr
 
-SELECT EMP_NAME , SUBSTR(EMAIL, 1, INSTR(EMAIL, '@')-1) 아이디 -- 다시 해보기 
+SELECT EMP_NAME , SUBSTR(EMAIL, 1, INSTR(EMAIL, '@')-1) 아이디
 FROM EMPLOYEE;
 
 -- [TRIM] ------------------------------------------------------------------------------------ 
@@ -64,7 +64,7 @@ SELECT TRIM(TRAILING'#'FROM'#####안녕#####')
 FROM DUAL; 
 
 -- 활용 예시 4) BOTH
-SELECT TRIM(TRAILING'#'FROM'#####안녕#####') 
+SELECT TRIM(BOTH'#'FROM'#####안녕#####') 
 FROM DUAL; 
 
 -- ===================================== [숫자 관련 함수] ===================================== 2교시 
@@ -268,7 +268,7 @@ FROM  EMPLOYEE;
 
 -- Y패턴 : 현재 세기 (21세기 == 20XX년 == 2000년대)
 -- R패턴 : 1세기를 기준으로 절반(50년) 이상인 경우 이전 세기 (1900년대)
-                            절반(50년) 미만인 경우 현재 세기 (2000년대`)
+--                            절반(50년) 미만인 경우 현재 세기 (2000년대`)
 SELECT TO_DATE('510505', 'YYMMDD') FROM DUAL;  -- 2051-05-05 00:00:00.000
 SELECT TO_DATE('510505', 'RRMMDD') FROM DUAL;  -- 1951-05-05 00:00:00.000
 
@@ -289,7 +289,7 @@ SELECT TO_NUMBER('1,000,000','9,999,999') + 500000 FROM DUAL;
 -- NVL(컬럼명, 컬럼값이 NULL일때 바꿀 값) : NULL인 컬럼값을 다른 값으로 변경
 -- NULL과 산술 연산을 진행하면 결과는 무조건 NULL
 
--- 기능 확인 예시) 
+-- 기능 확인 예시)  
 SELECT EMP_NAME, SALARY, NVL(BONUS, 0), NVL(SALARY * BONUS,0) 
 FROM EMPLOYEE;
 
@@ -420,4 +420,4 @@ WHERE SUBSTR(EMP_NO, 8, 1) = '1';
 SELECT SUM( DECODE(SUBSTR(EMP_NO,8,1),'1',1,0))  
 FROM EMPLOYEE;
 
-----까지 그룹함수 --------------------------------------------------------
+
