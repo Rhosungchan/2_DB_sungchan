@@ -1,0 +1,140 @@
+
+------------------------[WORKBOOK 3]---------------------------
+--[ 1번 ]=============================================
+
+SELECT STUDENT_NAME 학생이름, STUDENT_ADDRESS 주소지
+FROM TB_STUDENT  
+ORDER BY 1;
+
+--[ 2번 ]=============================================
+
+SELECT STUDENT_NAME, STUDENT_SSN 
+FROM TB_STUDENT  
+ORDER BY  SUBSTR(STUDENT_SSN,1,2) DESC;
+
+--[ 3번 ]=============================================
+
+SELECT STUDENT_NAME 학생이름, STUDENT_NO 학번, STUDENT_ADDRESS "거주지 주소" 
+FROM TB_STUDENT
+WHERE (STUDENT_ADDRESS LIKE '경기도%' OR STUDENT_ADDRESS LIKE '강원도%' )
+AND STUDENT_NO NOT LIKE '%A%';
+
+--[ 4번 ]=============================================
+SELECT PROFESSOR_NAME , PROFESSOR_SSN 
+FROM TB_PROFESSOR A
+JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+WHERE DEPARTMENT_NO = '005';
+
+--[ 5번 ]=============================================
+
+SELECT STUDENT_NO ,TO_CHAR(POINT,'0.00') 학점 
+FROM TB_GRADE
+WHERE TERM_NO = '200402'
+AND CLASS_NO = 'C3118100'
+ORDER BY 학점 DESC;
+
+--[ 6번 ]=============================================
+
+SELECT STUDENT_NO , STUDENT_NAME  , DEPARTMENT_NAME 
+FROM TB_STUDENT 
+NATURAL JOIN TB_DEPARTMENT 
+ORDER BY STUDENT_NAME DESC;
+
+--[ 7번 ]=============================================
+SELECT CLASS_NAME , DEPARTMENT_NAME
+FROM TB_CLASS 
+NATURAL JOIN TB_DEPARTMENT 
+
+--[ 8번 ]=============================================(강사 풀이 (다시해보기))
+SELECT CLASS_NAME , PROFESSOR_NAME 
+FROM TB_CLASS 
+JOIN TB_CLASS_PROFESSOR USING(CLASS_NO)
+JOIN TB_PROFESSOR P USING(PROFESSOR_NO)
+JOIN TB_DEPARTMENT D ON(P.DEPARTMENT_NO = D.DEPARTMENT_NO)
+WHERE CATEGORY = '인문사회';
+
+--[ 10번 ]=============================================(강사 풀이 (다시해보기))
+SELECT STUDENT_NO 학번 , STUDENT_NAME "학생 이름", ROUND(AVG(POINT), 1)"전체 평점" 
+FROM TB_GRADE
+JOIN TB_STUDENT USING(STUDENT_NO)
+JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+WHERE DEPARTMENT_NAME = '음악학과'
+GROUP BY STUDENT_NO , STUDENT_NAME 
+ORDER BY 1;
+
+--[ 13번 ]=============================================(강사 풀이 (다시해보기))
+
+SELECT CLASS_NAME , DEPARTMENT_NAME 
+FROM  TB_CLASS 
+LEFT JOIN TB_CLASS_PROFESSOR USING(CLASS_NO)
+JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+WHERE CATEGORY = '예체능'
+AND PROFESSOR_NO IS NULL;
+
+--[ 18번 ]=============================================(강사 풀이 (다시해보기))
+-- 풀이 1
+SELECT STUDENT_NO , STUDENT_NAME
+FROM(
+	SELECT STUDENT_NO , STUDENT_NAME, AVG(POINT) 평점
+	FROM TB_GRADE 
+	JOIN TB_STUDENT USING(STUDENT_NO)
+	JOIN TB_DEPARTMENT USING(DEPARTMENT_NO)
+	WHERE DEPARTMENT_NAME = '국어국문학과'
+	GROUP BY STUDENT_NO , STUDENT_NAME
+	ORDER BY 평점 DESC)
+WHERE ROWNUM = 1;
+
+-- 풀이 2 (1번 보다 컴퓨터 수행속도가 빠름 차후 실무에서 속도를 줄여보라고 할때 대비 참고)
+           -- JOIN보다는 SUBQUERY 수행 속도가 더 빠르다 
+SELECT STUDENT_NO , STUDENT_NAME
+FROM(
+	SELECT STUDENT_NO , STUDENT_NAME, AVG(POINT) 평점
+	FROM TB_GRADE 
+	JOIN TB_STUDENT USING(STUDENT_NO)
+	WHERE DEPARTMENT_NO = (SELECT DEPARTMENT_NO
+	                       FROM TB_DEPARTMENT
+	                       WHERE DEPARTMENT_NAME = '국어국문학과')
+	GROUP BY STUDENT_NO , STUDENT_NAME
+	ORDER BY 평점 DESC)
+WHERE ROWNUM = 1;
+
+--[ 19번 ]=============================================(강사 풀이 (다시해보기))
+
+SELECT DEPARTMENT_NAME "계열 학과명" , ROUND(AVG(POINT),1) 전공평점 
+FROM TB_DEPARTMENT
+JOIN TB_CLASS  USING(DEPARTMENT_NO)
+JOIN TB_GRADE  USING(CLASS_NO)
+WHERE CATEGORY = (SELECT CATEGORY
+					FROM TB_DEPARTMENT td 
+				   WHERE DEPARTMENT_NAME ='환경조경학과')
+AND CLASS_TYPE LIKE '전공%'
+GROUP BY DEPARTMENT_NAME
+ORDER BY 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
