@@ -139,9 +139,7 @@ SELECT * FROM kh_rsc.EMPLOYEE;
 
 
 
--- 다음주 시험 : DB란 무엇인가 ~~DCL (JDBC X)
-   --> ALTER 안나옴 (개념만 알고 있기)
-   --> PDF TC
+
 
 
 
